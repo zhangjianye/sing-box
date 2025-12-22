@@ -38,23 +38,24 @@
 
 > 参考: [4.3.2 配置选项](./uap-singbox-implementation.md#432-配置选项)
 
-- [ ] 创建 `option/uap.go` (UAPInboundOptions, UAPOutboundOptions)
+- [x] 创建 `option/uap.go` (UAPInboundOptions, UAPOutboundOptions, UAPUser)
 
 ### Step 5: 注册 UAP
 
 > 参考: [4.2 需要修改的文件](./uap-singbox-implementation.md#42-需要修改的文件)
+> 注: sing-box v1.13+ 使用注册表模式，所有协议在 `include/registry.go` 中注册
 
-- [ ] 修改 `option/inbound.go` 添加 UAPInboundOptions
-- [ ] 修改 `option/outbound.go` 添加 UAPOutboundOptions
-- [ ] 修改 `include/outbound_default.go` 注册 UAP outbound
-- [ ] 创建 `include/uap.go` (UAP 构建标签)
+- [x] 修改 `include/registry.go` 导入 UAP protocol 包
+- [x] 修改 `include/registry.go` 在 InboundRegistry() 中注册 uap.RegisterInbound
+- [x] 修改 `include/registry.go` 在 OutboundRegistry() 中注册 uap.RegisterOutbound
 
 ### Step 6: 编译测试
 
 > 参考: [7. 编译与部署](./uap-singbox-implementation.md#7-编译与部署)
 
-- [ ] 编译 sing-box (含 UAP)
-- [ ] 验证 `./sing-box version` 输出
+- [x] 编译 sing-box (含 UAP): `go build -tags "with_quic,with_utls,with_gvisor,with_wireguard" ./cmd/sing-box`
+- [x] 验证 `./sing-box version` 输出 (43MB binary, Tags: with_quic,with_utls,with_gvisor,with_wireguard)
+- [x] 验证 UAP 配置解析: `sing-box check` 和 `sing-box format` 正常工作
 
 ### Step 7: 功能验证
 
@@ -76,8 +77,8 @@
 | Step 1 | 2 | 2 | 100% |
 | Step 2 | 1 | 1 | 100% |
 | Step 3 | 10 | 10 | 100% |
-| Step 4 | 1 | 0 | 0% |
-| Step 5 | 4 | 0 | 0% |
-| Step 6 | 2 | 0 | 0% |
+| Step 4 | 1 | 1 | 100% |
+| Step 5 | 3 | 3 | 100% |
+| Step 6 | 3 | 3 | 100% |
 | Step 7 | 6 | 0 | 0% |
-| **总计** | **26** | **13** | **50%** |
+| **总计** | **26** | **20** | **77%** |

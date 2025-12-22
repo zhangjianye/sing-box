@@ -33,6 +33,7 @@ import (
 	"github.com/sagernet/sing-box/protocol/tor"
 	"github.com/sagernet/sing-box/protocol/trojan"
 	"github.com/sagernet/sing-box/protocol/tun"
+	"github.com/sagernet/sing-box/protocol/uap"
 	"github.com/sagernet/sing-box/protocol/vless"
 	"github.com/sagernet/sing-box/protocol/vmess"
 	"github.com/sagernet/sing-box/service/resolved"
@@ -62,6 +63,7 @@ func InboundRegistry() *inbound.Registry {
 	naive.RegisterInbound(registry)
 	shadowtls.RegisterInbound(registry)
 	vless.RegisterInbound(registry)
+	uap.RegisterInbound(registry)
 	anytls.RegisterInbound(registry)
 
 	registerQUICInbounds(registry)
@@ -90,6 +92,7 @@ func OutboundRegistry() *outbound.Registry {
 	ssh.RegisterOutbound(registry)
 	shadowtls.RegisterOutbound(registry)
 	vless.RegisterOutbound(registry)
+	uap.RegisterOutbound(registry)
 	anytls.RegisterOutbound(registry)
 
 	registerQUICOutbounds(registry)
