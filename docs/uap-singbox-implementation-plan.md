@@ -61,12 +61,12 @@
 
 > 参考: [6. UAP 配置示例](./uap-singbox-implementation.md#6-uap-配置示例)
 
-- [ ] 创建测试 Inbound 配置
-- [ ] 创建测试 Outbound 配置
-- [ ] 验证连接建立
-- [ ] 验证数据传输
-- [ ] 验证 Vision flow
-- [ ] 验证 Reality 握手
+- [x] 创建测试 Inbound 配置 (`test/configs/server.json`)
+- [x] 创建测试 Outbound 配置 (`test/configs/client.json`)
+- [x] 验证连接建立: SOCKS5 -> UAP Client -> UAP Server -> Direct ✅
+- [x] 验证数据传输: HTTP 请求/响应正常 ✅
+- [x] 验证 Vision flow: TLS + xtls-rprx-vision 正常 ✅
+- [x] 验证 Reality 握手: Reality TLS + Vision flow 正常 ✅
 
 ---
 
@@ -80,5 +80,5 @@
 | Step 4 | 1 | 1 | 100% |
 | Step 5 | 3 | 3 | 100% |
 | Step 6 | 3 | 3 | 100% |
-| Step 7 | 6 | 0 | 0% |
-| **总计** | **26** | **20** | **77%** |
+| Step 7 | 6 | 6 | 100% |
+| **总计** | **26** | **26** | **100%** |

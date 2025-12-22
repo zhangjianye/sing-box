@@ -1,0 +1,40 @@
+{
+  "log": {
+    "level": "debug",
+    "timestamp": true
+  },
+  "inbounds": [
+    {
+      "type": "uap",
+      "tag": "uap-in",
+      "listen": "127.0.0.1",
+      "listen_port": 10088,
+      "users": [
+        {
+          "name": "test-user",
+          "uuid": "a3de10a8-8d68-4a5e-8f5e-1c2d3e4f5a6b",
+          "flow": "xtls-rprx-vision"
+        }
+      ],
+      "tls": {
+        "enabled": true,
+        "server_name": "www.microsoft.com",
+        "reality": {
+          "enabled": true,
+          "handshake": {
+            "server": "www.microsoft.com",
+            "server_port": 443
+          },
+          "private_key": "oFEp8NRKk4PQ4Y1LwoUWAom16xYMlipLqcKuYgap1lE",
+          "short_id": ["abcd1234"]
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "log": {
+    "level": "debug",
+    "timestamp": true
+  },
+  "inbounds": [
+    {
+      "type": "socks",
+      "tag": "socks-in",
+      "listen": "127.0.0.1",
+      "listen_port": 1080
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "uap",
+      "tag": "uap-out",
+      "server": "127.0.0.1",
+      "server_port": 10086,
+      "uuid": "a3de10a8-8d68-4a5e-8f5e-1c2d3e4f5a6b"
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    }
+  ]
+}

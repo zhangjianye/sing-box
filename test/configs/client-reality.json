@@ -1,0 +1,41 @@
+{
+  "log": {
+    "level": "debug",
+    "timestamp": true
+  },
+  "inbounds": [
+    {
+      "type": "socks",
+      "tag": "socks-in",
+      "listen": "127.0.0.1",
+      "listen_port": 1082
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "uap",
+      "tag": "uap-out",
+      "server": "127.0.0.1",
+      "server_port": 10088,
+      "uuid": "a3de10a8-8d68-4a5e-8f5e-1c2d3e4f5a6b",
+      "flow": "xtls-rprx-vision",
+      "tls": {
+        "enabled": true,
+        "server_name": "www.microsoft.com",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "opCu8T70Lm7V_01XjMjmSieUnP6-iByfcga3ZQ7vRUQ",
+          "short_id": "abcd1234"
+        }
+      }
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    }
+  ]
+}

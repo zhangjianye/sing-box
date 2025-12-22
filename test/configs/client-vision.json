@@ -1,0 +1,33 @@
+{
+  "log": {
+    "level": "debug",
+    "timestamp": true
+  },
+  "inbounds": [
+    {
+      "type": "socks",
+      "tag": "socks-in",
+      "listen": "127.0.0.1",
+      "listen_port": 1081
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "uap",
+      "tag": "uap-out",
+      "server": "127.0.0.1",
+      "server_port": 10087,
+      "uuid": "a3de10a8-8d68-4a5e-8f5e-1c2d3e4f5a6b",
+      "flow": "xtls-rprx-vision",
+      "tls": {
+        "enabled": true,
+        "server_name": "localhost",
+        "insecure": true
+      }
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    }
+  ]
+}
