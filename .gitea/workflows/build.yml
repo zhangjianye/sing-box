@@ -1,0 +1,117 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version name (e.g., 1.0.0)"
+        required: false
+        type: string
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - { os: linux, arch: amd64 }
+          - { os: linux, arch: arm64 }
+          - { os: windows, arch: amd64 }
+          - { os: darwin, arch: amd64 }
+          - { os: darwin, arch: arm64 }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ^1.25.5
+
+      - name: Get version
+        id: version
+        run: |
+          if [[ -n "${{ inputs.version }}" ]]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=$(git describe --tags --always --dirty)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build
+        run: |
+          mkdir -p dist
+          BINARY_NAME="sing-box"
+          if [[ "${{ matrix.os }}" == "windows" ]]; then
+            BINARY_NAME="sing-box.exe"
+          fi
+          go build -v -trimpath \
+            -tags "with_quic,with_wireguard,with_utls,with_reality_server,with_gvisor" \
+            -ldflags "-s -w -X github.com/sagernet/sing-box/constant.Version=${{ steps.version.outputs.version }}" \
+            -o "dist/${BINARY_NAME}" \
+            ./cmd/sing-box
+        env:
+          CGO_ENABLED: "0"
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+
+      - name: Archive
+        run: |
+          cd dist
+          VERSION="${{ steps.version.outputs.version }}"
+          if [[ "${{ matrix.os }}" == "windows" ]]; then
+            zip "sing-box-${VERSION}-${{ matrix.os }}-${{ matrix.arch }}.zip" sing-box.exe
+          else
+            tar -czvf "sing-box-${VERSION}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz" sing-box
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sing-box-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/*.tar.gz
+          if-no-files-found: ignore
+
+      - name: Upload artifact (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: sing-box-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/*.zip
+          if-no-files-found: ignore
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ^1.25.5
+
+      - name: Run tests
+        run: |
+          go test -v -race -coverprofile=coverage.out ./...
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage.out
